@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" 
+                 revision="1.0" schemaVersion="1.0">
+    <policyNamespaces>
+        <target prefix="dlp" namespace="YourCompany.DLP.Policies"/>
+        <using prefix="windows" namespace="Microsoft.Policies.Windows"/>
+    </policyNamespaces>
+    
+    <resources minRequiredRevision="1.0"/>
+    
+    <categories>
+        <category name="DLP_Category" displayName="$(string.DLP_Category)">
+            <parentCategory ref="windows:Security"/>
+        </category>
+    </categories>
+    
+    <policies>
+        <policy name="DLP_Enforcement" class="Machine" displayName="$(string.DLP_Enforcement)" 
+               explainText="$(string.DLP_Enforcement_Help)" key="Software\Policies\YourCompany\DLP">
+            <parentCategory ref="DLP_Category"/>
+            <supportedOn ref="windows:SUPPORTED_Windows10"/>
+            <enabledValue>
+                <decimal value="1"/>
+            </enabledValue>
+            <disabledValue>
+                <decimal value="0"/>
+            </disabledValue>
+            <elements>
+                <boolean id="EnableUSBMonitoring" valueName="EnableUSBMonitoring">
+                    <trueValue>
+                        <decimal value="1"/>
+                    </trueValue>
+                    <falseValue>
+                        <decimal value="0"/>
+                    </falseValue>
+                </boolean>
+                <boolean id="EnableEmailMonitoring" valueName="EnableEmailMonitoring">
+                    <trueValue>
+                        <decimal value="1"/>
+                    </trueValue>
+                    <falseValue>
+                        <decimal value="0"/>
+                    </falseValue>
+                </boolean>
+                <text id="DLPServerURL" valueName="DLPServerURL" required="true"/>
+                <decimal id="ClassificationLevel" valueName="ClassificationLevel" minValue="1" maxValue="4"/>
+            </elements>
+        </policy>
+    </policies>
+</policyDefinitions>
