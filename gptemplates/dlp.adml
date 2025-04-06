@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" 
+                         revision="1.0" schemaVersion="1.0">
+    <displayName>
+        <string>Data Loss Prevention Policies</string>
+    </displayName>
+    <description>
+        <string>Company DLP System Group Policy Settings</string>
+    </description>
+    
+    <resources>
+        <stringTable>
+            <string id="DLP_Category">Data Loss Prevention</string>
+            
+            <string id="DLP_Enforcement">DLP Enforcement Settings</string>
+            <string id="DLP_Enforcement_Help">
+                Controls the behavior of the DLP system components.
+                Enable USB Monitoring: Blocks unauthorized USB devices
+                Enable Email Monitoring: Scans outgoing emails for sensitive data
+                DLP Server URL: Central management server endpoint
+                Classification Level: Minimum sensitivity level to enforce (1-4)
+            </string>
+            
+            <string id="EnableUSBMonitoring">Enable USB Device Monitoring</string>
+            <string id="EnableEmailMonitoring">Enable Email Monitoring</string>
+            <string id="DLPServerURL">DLP Server URL</string>
+            <string id="ClassificationLevel">Minimum Classification Level</string>
+        </stringTable>
+    </resources>
+</policyDefinitionResources>
