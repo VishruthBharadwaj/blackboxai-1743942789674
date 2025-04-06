@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp 
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="TaskPaneApp">
+  <Id>12345678-ABCD-4321-WXYZ-9876543210AB</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Your Company</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="DLP Classification Add-in"/>
+  <Description DefaultValue="Data Loss Prevention classification tool for Microsoft Office"/>
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+  
+  <SupportUrl DefaultValue="https://support.yourcompany.com/dlp"/>
+  
+  <Hosts>
+    <Host Name="Document"/>
+    <Host Name="Workbook"/>
+    <Host Name="Presentation"/>
+  </Hosts>
+  
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/src/taskpane.html"/>
+  </DefaultSettings>
+  
+  <Permissions>ReadWriteDocument</Permissions>
+  
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Document"/>
+    <Rule xsi:type="ItemIs" ItemType="Workbook"/>
+    <Rule xsi:type="ItemIs" ItemType="Presentation"/>
+  </Rule>
+</OfficeApp>
