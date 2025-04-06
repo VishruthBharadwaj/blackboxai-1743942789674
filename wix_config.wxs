@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Product Id="*" Name="Company DLP System" Language="1033" 
+            Version="1.0.0.0" Manufacturer="Your Company" UpgradeCode="PUT-GUID-HERE">
+        
+        <!-- Digital Signature Properties -->
+        <Property Id="DIGITALCERTIFICATE" Value="signing.pfx" />
+        <Property Id="DIGITALCERTIFICATE_PASSWORD" Secure="yes" />
+        <Property Id="TIMESTAMP_SERVER" Value="http://timestamp.digicert.com" />
+        
+        <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
+                Platform="x64" Description="Data Loss Prevention System"
+                Comments="Copyright (c) Your Company" Manufacturer="Your Company" />
+        
+        <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+        <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+        
+        <!-- Enterprise Features -->
+        <Feature Id="ProductFeature" Title="DLP System" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentGroupRef Id="ServiceComponents" />
+            <ComponentGroupRef Id="GPOComponents" />
+        </Feature>
+        
+        <Property Id="ALLUSERS" Value="1" />
+        <Property Id="MSIINSTALLPERUSER" Value="0" />
+        
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFiles64Folder">
+                <Directory Id="INSTALLFOLDER" Name="Company DLP">
+                    <!-- Main components remain same -->
+                    <Component Id="ServerFiles" Guid="PUT-GUID-HERE">
+                        <File Id="app.py" Source="app.py" KeyPath="yes" />
+                        <File Id="requirements.txt" Source="requirements.txt" />
+                        <File Id="envFile" Source=".env" />
+                    </Component>
+                    
+                    <!-- Digital Certificate -->
+                    <Component Id="SigningCert" Guid="PUT-GUID-HERE">
+                        <File Id="signingCert" Source="signing.pfx" KeyPath="yes" />
+                        <util:Certificate Id="CompanyCert" 
+                                        Name="Company DLP Code Signing"
+                                        StoreLocation="localMachine"
+                                        StoreName="trustedPublisher"
+                                        BinaryKey="signingCert"
+                                        Request="no"
+                                        Overwrite="yes" />
+                    </Component>
+                </Directory>
+            </Directory>
+        </Directory>
+        
+        <!-- Group Policy Templates -->
+        <Directory Id="GPOFolder" Name="GroupPolicy">
+            <Component Id="GPOTemplates" Guid="PUT-GUID-HERE">
+                <File Id="DLPAdmx" Source="gptemplates\dlp.admx" KeyPath="yes" />
+                <File Id="DLPAdml" Source="gptemplates\dlp.adml" />
+                <util:GroupPolicy Id="DLPPolicy" Name="DLP Configuration" />
+            </Component>
+        </Directory>
+        
+        <!-- Custom Actions for Silent Install -->
+        <CustomAction Id="SetSilent" Property="UILevel" Value="2" />
+        <InstallExecuteSequence>
+            <Custom Action="SetSilent" After="CostFinalize">UILevel=3</Custom>
+        </InstallExecuteSequence>
+        
+        <UI>
+            <UIRef Id="WixUI_Advanced" />
+            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">
+                WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1
+            </Publish>
+        </UI>
+        
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch DLP Admin Console" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXARGUMENTS" Value="/silent" />
+        
+        <CustomAction Id="LaunchApplication" FileKey="app.py" ExeCommand="" Return="asyncNoWait" />
+    </Product>
+</Wix>
